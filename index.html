@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: #222;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .container {
+        width: 800px;
+        height: 600px;
+    }
+</style>
+<body>
+    <div class="container"></div>
+
+    <script src="redComet.js"></script>
+    <script>
+        let container = document.querySelector('.container');
+        renderRedComet(container);
+    </script>
+</body>
+</html>
