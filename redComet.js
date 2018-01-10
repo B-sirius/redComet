@@ -8,7 +8,7 @@ let renderRedComet = function (container) {
     // 颜色
     const bgColor = '#000';
     const redCometColor = 'rgb(214, 30, 30)';
-    const redCometTailColor = 'rgb(232, 70, 70)';
+    const redCometTailColor = 'rgba(232, 70, 70, 0.7)';
 
     // 点
     const Dot = (function () {
@@ -71,7 +71,8 @@ let renderRedComet = function (container) {
         radius: 5,
         tail: null,
         tailLength: 20,
-        tailInterval: 5, // 间隔5帧
+        tailInterval: 2, // 拖尾帧间隔
+        tailSpeed: 4, // 拖尾速度
         tailRotation: Math.PI * 0.75,
         posHistory: [], // 每帧的坐标记录
         init() {
@@ -84,14 +85,15 @@ let renderRedComet = function (container) {
             this.dot.y = y;
         },
         updateData() {
-            // 如20个尾巴点，每个间隔5帧，最多只需记录100帧的坐标
+            // 如20个拖尾点，每个间隔5帧，最多只需记录100帧的坐标
             if (this.posHistory.length >= this.tailLength * this.tailInterval) {
                 this.posHistory.pop();
             }
             this.posHistory.unshift([this.dot.x, this.dot.y]);
             for (let i = 0; i < this.tailLength; i++) {
-                if (this.posHistory[i * this.tailInterval]) {
-                    this.tail[i] = [this.posHistory[i][0] - 6 * i, this.posHistory[i][1] + 6 * i];
+                let tailIndex = i * this.tailInterval;
+                if (this.posHistory[tailIndex]) {
+                    this.tail[i] = [this.posHistory[tailIndex][0] - this.tailSpeed * i, this.posHistory[tailIndex][1] + this.tailSpeed * i];
                 }
             }
         },
