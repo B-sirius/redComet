@@ -9,23 +9,8 @@ let renderRedComet = function (container) {
     const bgColor = '#000';
     const redCometColor = 'rgb(214, 30, 30)';
     const redCometTailColor = 'rgba(232, 70, 70, 0.7)';
-
-    // 点
-    const Dot = (function () {
-        const dotFn = {
-
-        }
-
-        return function (x, y, color) {
-            let dot = Object.create(dotFn);
-            dot.x = x;
-            dot.y = y;
-            dot.color = color;
-
-            return dot;
-        }
-    })();
-
+    const msColor = '#eee';
+    
     // canvas绘制
     let clearCanvas = () => ctx.clearRect(0, 0, canvas.width, canvas.height);
     let fillCanvas = (color) => {
@@ -64,6 +49,22 @@ let renderRedComet = function (container) {
             ctx.strokeStyle = color;
         ctx.stroke();
     }
+
+    // 点
+    const Dot = (function () {
+        const dotFn = {
+
+        }
+        return function (x, y, color) {
+            let dot = Object.create(dotFn);
+            dot.x = x;
+            dot.y = y;
+            dot.color = color;
+
+            return dot;
+        }
+    })();
+
 
     // 红彗星！
     let redComet = {
@@ -105,13 +106,52 @@ let renderRedComet = function (container) {
         }
     }
 
+    // ms大军!
+    let msRain = {
+        msList: [],
+        msListLength: 50,
+        basicRadius: 4,
+        basicSpeed: 2,
+        init() {
+            while (this.msListLength--) {
+                let dot = Dot(null, null, msColor);
+                this.initPos(dot);
+                this.msList.push(dot);
+            }
+        },
+        initPos(dot) {
+            if (Math.random() > 0.5) {
+                dot.x = canvas.width * 1.1 + Math.random() * 20;
+                dot.y = Math.random() * canvas.height;
+            } else {
+                dot.x = Math.random() * canvas.width;
+                dot.y = 0 - canvas.height * 0.1 - Math.random() * 20;
+            }
+        },
+        updateData() {
+            for (let item of this.msList) {
+                item.x -= this.basicSpeed;
+                item.y += this.basicSpeed;
+            }
+        },
+        draw() {
+            for (let item of this.msList) {
+                drawCircle(item.x, item.y, this.basicRadius, item.color);
+            }
+        },
+        
+    }
+
     // 渲染
     let render = function () {
         // 更新数据
+        msRain.updateData();
         redComet.updateData();
-
+        
+        // 绘制
         clearCanvas();
         fillCanvas(bgColor);
+        msRain.draw();
         redComet.draw();
 
         requestAnimationFrame(render);
@@ -125,6 +165,7 @@ let renderRedComet = function (container) {
     }
 
     redComet.init();
+    msRain.init();
     listenMouse();
     render();
 
